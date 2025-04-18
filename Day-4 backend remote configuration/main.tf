@@ -14,3 +14,9 @@ resource "aws_subnet" "subnet-2" {
     vpc_id = aws_vpc.dev.id
   
 }
+
+resource "aws_subnet" "subnet-4" {
+    cidr_block = "10.0.4.0/24"
+    vpc_id = aws_vpc.dev.id
+  
+}

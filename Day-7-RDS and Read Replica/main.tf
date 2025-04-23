@@ -28,10 +28,11 @@ resource "aws_db_instance" "default" {
   maintenance_window = "sun:04:00-sun:05:00"  # Maintenance every Sunday (UTC)
 
   # Enable deletion protection (to prevent accidental deletion)
-  deletion_protection = true
+  deletion_protection = false
+  final_snapshot_identifier = "books-rds-final-snap"
 
   # Skip final snapshot
-  skip_final_snapshot = true
+  skip_final_snapshot = false
 }
 
 # IAM Role for RDS Enhanced Monitoring
@@ -73,6 +74,7 @@ resource "aws_db_instance" "read_replica" {
   identifier             = "read-replica-instance"
   replicate_source_db    = aws_db_instance.default.arn
   instance_class         = "db.t3.micro"
+  skip_final_snapshot    = true
   publicly_accessible    = false
   db_subnet_group_name   = aws_db_subnet_group.replica.name
 #   vpc_security_group_ids = [aws_security_group.db_sg.id]

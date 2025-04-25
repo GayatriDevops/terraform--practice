@@ -1,5 +1,5 @@
 module "vpc" {
-    source = "../day-8-vpc-source-module"
+    source = "github.com/GayatriDevops/terraform--practice/day-8-vpc-source-module"
     vpc_name = "custom-vpc"
     vpc_cidr_block = "10.0.0.0/16"
     public_subnets = ["10.0.0.0/24","10.0.1.0/24"]

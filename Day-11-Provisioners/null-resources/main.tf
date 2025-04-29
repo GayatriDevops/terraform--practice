@@ -7,40 +7,43 @@ resource "aws_key_pair" "example" {
 # IAM Policy for S3 access
 resource "aws_iam_policy" "s3_access_policy" {
   name        = "EC2S3AccessPolicy"
-  description = "Policy for EC2 instances to access S3"
+  description = "Policy for EC2 instances to access specific folders in S3"
   policy      = jsonencode({
     Version   = "2012-10-17"
     Statement = [
       {
         Action   = [
           "s3:PutObject",
-          "s3:GetObject",
-          "s3:ListBucket"
+          "s3:GetObject"
         ]
         Effect   = "Allow"
         Resource = [
-          "arn:aws:s3:::gayatridevops",
-          "arn:aws:s3:::gayatridevops/*"
+          "arn:aws:s3:::gayatridevops/MyAppLogGroup/MyAppLogStream"  # Access to specific folder
         ]
       }
     ]
   })
 }
 
+
 # IAM Role for EC2
 resource "aws_iam_role" "ec2_role" {
-  name = "ec2_s3_access_role"
+  name = "EC2CloudWatchRole"
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Action    = "sts:AssumeRole"
-      Effect    = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
+    Statement = [
+      {
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
       }
-    }]
+    ]
   })
 }
+
 
 # Attach policy to role
 resource "aws_iam_role_policy_attachment" "ec2_role_attachment" {
